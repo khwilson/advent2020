@@ -1,0 +1,11 @@
+# Mac cruft
+.DS_Store
+
+# Editor cruft
+.vscode
+*~
+
+# Python cruft
+__pycache__
+.pytest_cache
+.venv
