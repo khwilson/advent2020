@@ -1,5 +1,6 @@
 """ AOC Day 1 """
 import itertools as its
+from collections import Counter
 from pathlib import Path
 from typing import Union
 
@@ -38,15 +39,31 @@ def second(filename: str) -> int:
         The product of the three integers that sum to 2020
     """
     with open(filename, "rt") as infile:
-        values = {
+        values_with_counts = Counter(
             val
             for line in infile
             if (sline := line.strip()) and 0 <= (val := int(sline)) <= 2020
-        }
+        )
+
+    values = set(values_with_counts)
 
     # Quadratic method: Just compute all sums of pairs and find overlapping values
     for left, right in its.combinations(values, 2):
-        if 2020 - left - right in values:
-            return left * right * (2020 - left - right)
+        val = 2020 - left - right
+        if val in values:
+            # Make sure that these lines are distinct!
+            if val == left:
+                if val == right:
+                    # Shouldn't happen because gcd(2020, 3) = 1, but for completeness
+                    if values_with_counts[val] <= 2:
+                        continue
+                else:
+                    if values_with_counts[val] <= 1:
+                        continue
+            elif val == right:
+                if values_with_counts[val] <= 1:
+                    continue
+                # Do a linear pass to make sure that there are
+            return left * right * val
 
     raise ValueError("Something went wrong in part 2")
