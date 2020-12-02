@@ -1,7 +1,14 @@
 """ AOC Day 2 """
 import re
 from pathlib import Path
-from typing import Union
+from typing import Tuple, Union
+
+
+def _extract_values(line: str) -> Tuple[int, int, str, str]:
+    left, right, letter, password = re.match(
+        r"(\d+)-(\d+) ([a-z]): ([a-z]+)", line.strip()
+    ).groups()
+    return int(left), int(right), letter, password
 
 
 def first(filename: Union[str, Path]) -> int:
@@ -17,14 +24,9 @@ def first(filename: Union[str, Path]) -> int:
     total_valid = 0
     with open(filename, "rt") as infile:
         for line in infile:
-            policy_min, policy_max, letter, password = re.match(
-                r"(\d+)-(\d+) ([a-z]): ([a-z]+)", line.strip()
-            ).groups()
-            if (
-                int(policy_min)
-                <= sum(1 for let in password if let == letter)
-                <= int(policy_max)
-            ):
+            policy_min, policy_max, letter, password = _extract_values(line)
+            count = sum(1 for let in password if let == letter)
+            if policy_min <= count <= policy_max:
                 total_valid += 1
     return total_valid
 
@@ -42,11 +44,7 @@ def second(filename: Union[str, Path]) -> int:
     total_valid = 0
     with open(filename, "rt") as infile:
         for line in infile:
-            pos_one, pos_two, letter, password = re.match(
-                r"(\d+)-(\d+) ([a-z]): ([a-z]+)", line.strip()
-            ).groups()
-            if (password[int(pos_one) - 1] == letter) != (
-                password[int(pos_two) - 1] == letter
-            ):
+            pos_one, pos_two, letter, password = _extract_values(line)
+            if (password[pos_one - 1] == letter) != (password[pos_two - 1] == letter):
                 total_valid += 1
     return total_valid

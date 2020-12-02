@@ -41,7 +41,7 @@ def second(filename: str) -> int:
         values = {
             val
             for line in infile
-            if line.strip() and 0 <= (val := int(line.strip())) <= 2020
+            if (sline := line.strip()) and 0 <= (val := int(sline)) <= 2020
         }
 
     # Quadratic method: Just compute all sums of pairs and find overlapping values
