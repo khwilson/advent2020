@@ -1,0 +1,32 @@
+name: Run all tests
+build:
+  on: ["push"]
+
+
+jobs:
+  run_tests:
+    on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.6'
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1.1.1
+        with:
+          version: 1.1.4
+
+      - name: Pull cache if present
+        uses: actions/cache@v2
+        path: .venv
+        key: ${{ runner.OS }}-python-3.8-${{ hashFiles('**/*.poetry.lock') }}
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run tests
+        run: poetry run py.test
