@@ -21,11 +21,12 @@ jobs:
 
       - name: Pull cache if present
         uses: actions/cache@v2
-        path: .venv
-        key: ${{ runner.OS }}-python-3.8-${{ hashFiles('**/*.poetry.lock') }}
-        restore-keys: |
-             ${{ runner.OS }}-python-3.8-
-             ${{ runner.OS }}-
+        with:
+          path: .venv
+          key: ${{ runner.OS }}-python-3.8-${{ hashFiles('**/*.poetry.lock') }}
+          restore-keys: |
+              ${{ runner.OS }}-python-3.8-
+              ${{ runner.OS }}-
 
       - name: Install dependencies
         run: poetry install
