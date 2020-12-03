@@ -4,7 +4,7 @@ on: ["push"]
 
 jobs:
   run_tests:
-    on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -23,6 +23,9 @@ jobs:
         uses: actions/cache@v2
         path: .venv
         key: ${{ runner.OS }}-python-3.8-${{ hashFiles('**/*.poetry.lock') }}
+        restore-keys: |
+             ${{ runner.OS }}-python-3.8-
+             ${{ runner.OS }}-
 
       - name: Install dependencies
         run: poetry install
