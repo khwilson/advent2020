@@ -5,12 +5,12 @@ from typing import List, Union
 
 import numpy as np
 
-TREE = '#'
-OPEN = '.'
+TREE = "#"
+OPEN = "."
 
 
 def parse_file(filename: Union[str, Path]) -> List[str]:
-    with open(filename, 'rt') as infile:
+    with open(filename, "rt") as infile:
         return [line.strip() for line in infile]
 
 
@@ -21,7 +21,7 @@ def count_trees(spaces: List[str], right: int = 3, down: int = 1) -> int:
     """
     total_trees = 0
     for i, row in enumerate(spaces[::down]):
-        total_trees += (row[(right * i) % len(row)] == TREE)
+        total_trees += row[(right * i) % len(row)] == TREE
     return total_trees
 
 
@@ -32,15 +32,16 @@ def first(filename: Union[str, Path]) -> int:
     spaces = parse_file(filename)
     return count_trees(spaces)
 
+
 def second(filename: Union[str, Path]) -> int:
     """
     Return the product of the number of tress hit along several slopes
     """
     spaces = parse_file(filename)
     return (
-        count_trees(spaces, 1, 1) *
-        count_trees(spaces, 3, 1) *
-        count_trees(spaces, 5, 1) *
-        count_trees(spaces, 7, 1) *
-        count_trees(spaces, 1, 2)
+        count_trees(spaces, 1, 1)
+        * count_trees(spaces, 3, 1)
+        * count_trees(spaces, 5, 1)
+        * count_trees(spaces, 7, 1)
+        * count_trees(spaces, 1, 2)
     )

@@ -1,4 +1,4 @@
-""" AOC Day 4 """
+""" AOC Day 5 """
 import itertools as its
 from pathlib import Path
 from typing import Union
