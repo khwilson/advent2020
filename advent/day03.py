@@ -1,15 +1,13 @@
 """ AOC Day 3 """
-import itertools as its
 from pathlib import Path
 from typing import List, Union
-
-import numpy as np
 
 TREE = "#"
 OPEN = "."
 
 
 def parse_file(filename: Union[str, Path]) -> List[str]:
+    """ Parse the file contents """
     with open(filename, "rt") as infile:
         return [line.strip() for line in infile]
 

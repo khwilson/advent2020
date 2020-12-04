@@ -2,13 +2,10 @@
 from __future__ import annotations
 
 import dataclasses
-import itertools as its
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Union
-
-import numpy as np
+from typing import List, Optional, Union
 
 
 RENAME_MAP = {
@@ -25,6 +22,9 @@ RENAME_MAP = {
 
 @dataclass(frozen=True, order=True)
 class PotentialPassport:
+    """
+    A representation of the raw data
+    """
     birth_year: Optional[int] = None
     issue_year: Optional[int] = None
     expiration_year: Optional[int] = None
@@ -35,12 +35,17 @@ class PotentialPassport:
     country_id: Optional[int] = None
 
     @classmethod
-    def parse(cls, datum: Dict[str, Union[int, str]]) -> PotentialPassport:
-        passport = {foo.split(":")[0]: foo.split(":")[1] for foo in datum}
+    def parse(cls, datum: List[str]) -> PotentialPassport:
+        """ Parse a passport from its raw representation """
+        passport = {dat.split(":")[0]: dat.split(":")[1] for dat in datum}
         passport = {RENAME_MAP.get(key, key): val for key, val in passport.items()}
         return PotentialPassport(**passport)
 
     def is_simple_valid(self) -> Optional[SimpleValidPassport]:
+        """
+        If the passport is "simply valid", return a SimpleValidPassport instance of it
+        else return None
+        """
         if not (
             self.birth_year is None
             or self.issue_year is None
@@ -56,29 +61,35 @@ class PotentialPassport:
 
 @dataclass(frozen=True, order=True)
 class SimpleValidPassport:
-    birth_year: Optional[str]
-    issue_year: Optional[str]
-    expiration_year: Optional[str]
-    height: Optional[str]
-    hair_color: Optional[str]
-    eye_color: Optional[str]
-    passport_id: Optional[str]
+    """
+    A passport that at least is at most only missing its country code
+    """
+    birth_year: str
+    issue_year: str
+    expiration_year: str
+    height: str
+    hair_color: str
+    eye_color: str
+    passport_id: str
     country_id: Optional[str]
 
     def is_valid(self) -> bool:
-        if not len(self.birth_year) == 4:
+        """
+        Does this passport meet all the requirements?
+        """
+        if len(self.birth_year) != 4:
             return False
-        if not (1920 <= int(self.birth_year) <= 2002):
-            return False
-
-        if not len(self.issue_year) == 4:
-            return False
-        if not (2010 <= int(self.issue_year) <= 2020):
+        if not 1920 <= int(self.birth_year) <= 2002:
             return False
 
-        if not len(self.expiration_year) == 4:
+        if len(self.issue_year) != 4:
             return False
-        if not (2020 <= int(self.expiration_year) <= 2030):
+        if not 2010 <= int(self.issue_year) <= 2020:
+            return False
+
+        if len(self.expiration_year) != 4:
+            return False
+        if not 2020 <= int(self.expiration_year) <= 2030:
             return False
 
         match = re.match(r"^(\d+)(cm|in)$", self.height)
@@ -90,10 +101,10 @@ class SimpleValidPassport:
             return False
 
         if match.groups()[1] == "cm":
-            if not (150 <= hgt <= 193):
+            if not 150 <= hgt <= 193:
                 return False
         elif match.groups()[1] == "in":
-            if not (59 <= hgt <= 76):
+            if not 59 <= hgt <= 76:
                 return False
         else:
             return False
@@ -111,6 +122,9 @@ class SimpleValidPassport:
 
 
 def parse_file(filename: Union[str, Path]) -> List[PotentialPassport]:
+    """
+    Parse a file into a list of potential passports
+    """
     data = []
     datum = []
     with open(filename, "rt") as infile:
