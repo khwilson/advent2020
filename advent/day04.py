@@ -81,7 +81,7 @@ class SimpleValidPassport:
         if not (2020 <= int(self.expiration_year) <= 2030):
             return False
 
-        match = re.match(r"(\d+)(cm|in)", self.height)
+        match = re.match(r"^(\d+)(cm|in)$", self.height)
         if not match:
             return False
         try:
@@ -98,13 +98,13 @@ class SimpleValidPassport:
         else:
             return False
 
-        if not re.match(r"#[0-9abcdef]{6}", self.hair_color):
+        if not re.match(r"#[0-9a-f]{6}", self.hair_color):
             return False
 
         if self.eye_color not in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]:
             return False
 
-        if not re.match(r"[0-9]{9}", self.passport_id):
+        if not re.match(r"^[0-9]{9}$", self.passport_id):
             return False
 
         return True
@@ -131,7 +131,7 @@ def parse_file(filename: Union[str, Path]) -> List[PotentialPassport]:
 
 def first(filename: Union[str, Path]) -> int:
     """
-    Part 1
+    Count all passports that are at most missing a country_id
     """
     total_valid = sum(
         bool(passport.is_simple_valid()) for passport in parse_file(filename)
@@ -141,9 +141,7 @@ def first(filename: Union[str, Path]) -> int:
 
 def second(filename: Union[str, Path]) -> int:
     """
-    Part 2
-
-    Currently still broken. Have some weird off by one :scream:
+    Count all passports that follow all the many validation rules
     """
     total_valid = 0
     for passport in parse_file(filename):
