@@ -1,7 +1,6 @@
 """ AOC Day 4 """
 from __future__ import annotations
 
-import dataclasses
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -20,11 +19,18 @@ RENAME_MAP = {
 }
 
 
+def _is_valid_year(year: str, left: int, right: int) -> bool:
+    if not re.fullmatch(r"\d{4}", year):
+        return False
+    return left <= int(year) <= right
+
+
 @dataclass(frozen=True, order=True)
 class PotentialPassport:
     """
     A representation of the raw data
     """
+
     birth_year: Optional[int] = None
     issue_year: Optional[int] = None
     expiration_year: Optional[int] = None
@@ -41,12 +47,11 @@ class PotentialPassport:
         passport = {RENAME_MAP.get(key, key): val for key, val in passport.items()}
         return PotentialPassport(**passport)
 
-    def is_simple_valid(self) -> Optional[SimpleValidPassport]:
+    def is_simple_valid(self) -> bool:
         """
-        If the passport is "simply valid", return a SimpleValidPassport instance of it
-        else return None
+        If the passport is "simply valid" return True, else False
         """
-        if not (
+        return not (
             self.birth_year is None
             or self.issue_year is None
             or self.expiration_year is None
@@ -54,71 +59,35 @@ class PotentialPassport:
             or self.hair_color is None
             or self.eye_color is None
             or self.passport_id is None
-        ):
-            return SimpleValidPassport(**dataclasses.asdict(self))
-        return None
-
-
-@dataclass(frozen=True, order=True)
-class SimpleValidPassport:
-    """
-    A passport that at least is at most only missing its country code
-    """
-    birth_year: str
-    issue_year: str
-    expiration_year: str
-    height: str
-    hair_color: str
-    eye_color: str
-    passport_id: str
-    country_id: Optional[str]
+        )
 
     def is_valid(self) -> bool:
         """
         Does this passport meet all the requirements?
         """
-        if len(self.birth_year) != 4:
-            return False
-        if not 1920 <= int(self.birth_year) <= 2002:
+        if not self.is_simple_valid():
             return False
 
-        if len(self.issue_year) != 4:
-            return False
-        if not 2010 <= int(self.issue_year) <= 2020:
-            return False
-
-        if len(self.expiration_year) != 4:
-            return False
-        if not 2020 <= int(self.expiration_year) <= 2030:
-            return False
-
-        match = re.match(r"^(\d+)(cm|in)$", self.height)
+        match = re.fullmatch(r"(\d+)(cm|in)", self.height)
         if not match:
             return False
-        try:
-            hgt = int(match.groups()[0])
-        except ValueError:
-            return False
+        hgt = int(match.groups()[0])
 
         if match.groups()[1] == "cm":
             if not 150 <= hgt <= 193:
                 return False
-        elif match.groups()[1] == "in":
+        else:
             if not 59 <= hgt <= 76:
                 return False
-        else:
-            return False
 
-        if not re.match(r"#[0-9a-f]{6}", self.hair_color):
-            return False
-
-        if self.eye_color not in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]:
-            return False
-
-        if not re.match(r"^[0-9]{9}$", self.passport_id):
-            return False
-
-        return True
+        return bool(
+            _is_valid_year(self.birth_year, 1920, 2002)
+            and _is_valid_year(self.issue_year, 2010, 2020)
+            and _is_valid_year(self.expiration_year, 2020, 2030)
+            and re.fullmatch(r"#[0-9a-f]{6}", self.hair_color)
+            and self.eye_color in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
+            and re.fullmatch(r"[0-9]{9}$", self.passport_id)
+        )
 
 
 def parse_file(filename: Union[str, Path]) -> List[PotentialPassport]:
@@ -147,9 +116,7 @@ def first(filename: Union[str, Path]) -> int:
     """
     Count all passports that are at most missing a country_id
     """
-    total_valid = sum(
-        bool(passport.is_simple_valid()) for passport in parse_file(filename)
-    )
+    total_valid = sum(passport.is_simple_valid() for passport in parse_file(filename))
     return total_valid
 
 
@@ -157,9 +124,4 @@ def second(filename: Union[str, Path]) -> int:
     """
     Count all passports that follow all the many validation rules
     """
-    total_valid = 0
-    for passport in parse_file(filename):
-        if passport.is_simple_valid():
-            if passport.is_simple_valid().is_valid():
-                total_valid += 1
-    return total_valid
+    return sum(passport.is_valid() for passport in parse_file(filename))
