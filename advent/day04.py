@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Union
 
-
 RENAME_MAP = {
     "byr": "birth_year",
     "iyr": "issue_year",
