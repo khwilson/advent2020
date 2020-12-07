@@ -23,21 +23,20 @@ def parse_rules(filename: Union[str, Path]) -> Dict[str, List[Tuple[str, int]]]:
     rules = {}
     with open(filename, "rt") as infile:
         for line in infile:
-            line = line.strip("\n.")
-            left, right = line.split("contain")
+            left, right = line.strip("\n.").split("contain")
             left = left.strip()[: -len(" bags")]
             right = right.strip()
-            all_right = right.split(",")
-            children = []
-            for thing in all_right:
-                match = re.match(r"(\d+) ([a-z ]+) bags?", thing.strip())
-                if not match:
-                    if thing != "no other bags":
-                        raise ValueError(f"Something is wrong in regex: {thing}")
-                else:
-                    children.append((match.groups()[1], int(match.groups()[0])))
+            if right == "no other bags":
+                rules[left] = []
+            else:
+                children = [
+                    (bag_type, int(bag_num))
+                    for bag_num, bag_type in re.findall(r"(\d+) ([a-z ]+) bags?", right)
+                ]
+                if not children:
+                    raise ValueError(f"Something is wrong in regex for {right}")
+                rules[left] = children
 
-            rules[left] = children
     return rules
 
 
@@ -53,14 +52,10 @@ def first(filename: Union[str, Path]) -> int:
         for child, _ in value:
             child_to_parent[child].append(key)
 
-    # BFS up the tree
+    # BFS up the tree. Note we're not counting the bag itself and we assume no
+    # directed cycles so this is fine for the resulting BFS
     seen_grandparents = set()
     queue = deque(["shiny gold"])
-
-    # Shiny gold may not be allowed to be an outer bag unless it's
-    # allowed to be empty
-    if "shiny gold" in rules["shiny gold"] and len(rules["shiny gold"]) == 0:
-        seen_grandparents.add("shiny gold")
 
     # Execute BFS
     while queue:
