@@ -75,5 +75,13 @@ def day08_command(filename: str):
     click.echo(f"The answer to part 2 is: {day08.second(filename)}")
 
 
+@cli.command("day09")
+@click.argument("filename")
+def day09_command(filename: str):
+    """ Day 9 """
+    click.echo(f"The answer to part 1 is: {day09.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day09.second(filename)}")
+
+
 if __name__ == "__main__":
     cli()
