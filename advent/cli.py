@@ -3,7 +3,7 @@ The command line to run the actual code
 """
 import click
 
-from . import day01, day02, day03, day04, day05, day06, day07, day08
+from . import day01, day02, day03, day04, day05, day06, day07, day08, day09, day10
 
 
 @click.group()
@@ -81,6 +81,14 @@ def day09_command(filename: str):
     """ Day 9 """
     click.echo(f"The answer to part 1 is: {day09.first(filename)}")
     click.echo(f"The answer to part 2 is: {day09.second(filename)}")
+
+
+@cli.command("day10")
+@click.argument("filename")
+def day10_command(filename: str):
+    """ Day 10 """
+    click.echo(f"The answer to part 1 is: {day10.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day10.second(filename)}")
 
 
 if __name__ == "__main__":
