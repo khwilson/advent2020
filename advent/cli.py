@@ -3,7 +3,39 @@ The command line to run the actual code
 """
 import click
 
-from . import day01, day02, day03, day04, day05, day06, day07, day08, day09, day10
+from . import (
+    day01,
+    day02,
+    day03,
+    day04,
+    day05,
+    day06,
+    day07,
+    day08,
+    day09,
+    day10,
+    day11,
+    day12,
+    day13,
+    day14,
+    day15,
+    day16,
+    day17,
+    day18,
+    day19,
+    day20,
+    day21,
+    day22,
+    day23,
+    day24,
+    day25,
+    day26,
+    day27,
+    day28,
+    day29,
+    day30,
+    day31,
+)
 
 
 @click.group()
@@ -89,6 +121,174 @@ def day10_command(filename: str):
     """ Day 10 """
     click.echo(f"The answer to part 1 is: {day10.first(filename)}")
     click.echo(f"The answer to part 2 is: {day10.second(filename)}")
+
+
+@cli.command("day11")
+@click.argument("filename")
+def day11_command(filename: str):
+    """ Day 11 """
+    click.echo(f"The answer to part 1 is: {day11.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day11.second(filename)}")
+
+
+@cli.command("day12")
+@click.argument("filename")
+def day12_command(filename: str):
+    """ Day 12 """
+    click.echo(f"The answer to part 1 is: {day12.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day12.second(filename)}")
+
+
+@cli.command("day13")
+@click.argument("filename")
+def day13_command(filename: str):
+    """ Day 13 """
+    click.echo(f"The answer to part 1 is: {day13.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day13.second(filename)}")
+
+
+@cli.command("day14")
+@click.argument("filename")
+def day14_command(filename: str):
+    """ Day 14 """
+    click.echo(f"The answer to part 1 is: {day14.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day14.second(filename)}")
+
+
+@cli.command("day15")
+@click.argument("filename")
+def day15_command(filename: str):
+    """ Day 15 """
+    click.echo(f"The answer to part 1 is: {day15.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day15.second(filename)}")
+
+
+@cli.command("day16")
+@click.argument("filename")
+def day16_command(filename: str):
+    """ Day 16 """
+    click.echo(f"The answer to part 1 is: {day16.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day16.second(filename)}")
+
+
+@cli.command("day17")
+@click.argument("filename")
+def day17_command(filename: str):
+    """ Day 17 """
+    click.echo(f"The answer to part 1 is: {day17.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day17.second(filename)}")
+
+
+@cli.command("day18")
+@click.argument("filename")
+def day18_command(filename: str):
+    """ Day 18 """
+    click.echo(f"The answer to part 1 is: {day18.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day18.second(filename)}")
+
+
+@cli.command("day19")
+@click.argument("filename")
+def day19_command(filename: str):
+    """ Day 19 """
+    click.echo(f"The answer to part 1 is: {day19.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day19.second(filename)}")
+
+
+@cli.command("day20")
+@click.argument("filename")
+def day20_command(filename: str):
+    """ Day 20 """
+    click.echo(f"The answer to part 1 is: {day20.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day20.second(filename)}")
+
+
+@cli.command("day21")
+@click.argument("filename")
+def day21_command(filename: str):
+    """ Day 21 """
+    click.echo(f"The answer to part 1 is: {day21.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day21.second(filename)}")
+
+
+@cli.command("day22")
+@click.argument("filename")
+def day22_command(filename: str):
+    """ Day 22 """
+    click.echo(f"The answer to part 1 is: {day22.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day22.second(filename)}")
+
+
+@cli.command("day23")
+@click.argument("filename")
+def day23_command(filename: str):
+    """ Day 23 """
+    click.echo(f"The answer to part 1 is: {day23.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day23.second(filename)}")
+
+
+@cli.command("day24")
+@click.argument("filename")
+def day24_command(filename: str):
+    """ Day 24 """
+    click.echo(f"The answer to part 1 is: {day24.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day24.second(filename)}")
+
+
+@cli.command("day25")
+@click.argument("filename")
+def day25_command(filename: str):
+    """ Day 25 """
+    click.echo(f"The answer to part 1 is: {day25.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day25.second(filename)}")
+
+
+@cli.command("day26")
+@click.argument("filename")
+def day26_command(filename: str):
+    """ Day 26 """
+    click.echo(f"The answer to part 1 is: {day26.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day26.second(filename)}")
+
+
+@cli.command("day27")
+@click.argument("filename")
+def day27_command(filename: str):
+    """ Day 27 """
+    click.echo(f"The answer to part 1 is: {day27.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day27.second(filename)}")
+
+
+@cli.command("day28")
+@click.argument("filename")
+def day28_command(filename: str):
+    """ Day 28 """
+    click.echo(f"The answer to part 1 is: {day28.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day28.second(filename)}")
+
+
+@cli.command("day29")
+@click.argument("filename")
+def day29_command(filename: str):
+    """ Day 29 """
+    click.echo(f"The answer to part 1 is: {day29.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day29.second(filename)}")
+
+
+@cli.command("day30")
+@click.argument("filename")
+def day30_command(filename: str):
+    """ Day 30 """
+    click.echo(f"The answer to part 1 is: {day30.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day30.second(filename)}")
+
+
+@cli.command("day31")
+@click.argument("filename")
+def day31_command(filename: str):
+    """ Day 31 """
+    click.echo(f"The answer to part 1 is: {day31.first(filename)}")
+    click.echo(f"The answer to part 2 is: {day31.second(filename)}")
 
 
 if __name__ == "__main__":
