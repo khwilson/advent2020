@@ -1,10 +1,11 @@
 from pathlib import Path
 
-from advent import day05
-
-# def test_first(fixture_path: Path):
-#     assert day05.first(fixture_path / "example05.txt") == 514579
+from advent import day12
 
 
-# def test_second(fixture_path: Path):
-#     assert day05.second(fixture_path / "example05.txt") == 241861950
+def test_first(fixture_path: Path):
+    assert day12.first(fixture_path / "example12.txt") == 25
+
+
+def test_second(fixture_path: Path):
+    assert day12.second(fixture_path / "example12.txt") == 286
