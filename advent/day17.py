@@ -23,6 +23,27 @@ def neighbors(*args: Tuple[int, ...]) -> Iterator[Tuple[int, ...]]:
             yield tuple([x + i for x, i in zip(args, incs)])
 
 
+def read_board(filename: Union[str, Path], dim: int = 3) -> SpaceType:
+    """
+    Read in the board from a file (which contains a 2d board). The
+    coordinates will be right 0-padded until they are `dim` wide
+    """
+    space: SpaceType = defaultdict(bool)
+    with open(filename, "rt") as infile:
+        for y, line in enumerate(infile):
+            line = line.strip()
+            for x, char in enumerate(line):
+                coord = tuple([x, y] + [0] * (dim - 2))
+                if char == ACTIVE:
+                    space[coord] = True
+                elif char == INACTIVE:
+                    pass
+                    # space[coord] = False
+                else:
+                    raise ValueError(f"Invalid character: {char}")
+    return space
+
+
 def play_game(space: SpaceType, num_rounds: int) -> SpaceType:
     """
     Play a game of life according to the following rules:
@@ -38,9 +59,11 @@ def play_game(space: SpaceType, num_rounds: int) -> SpaceType:
         new_space = defaultdict(bool)
         for key in keys:
             if space[key]:
-                new_space[key] = 2 <= sum(space[key] for key in neighbors(*key)) <= 3
+                if 2 <= sum(space[key] for key in neighbors(*key)) <= 3:
+                    new_space[key] = True
             else:
-                new_space[key] = sum(space[key] for key in neighbors(*key)) == 3
+                if sum(space[key] for key in neighbors(*key)) == 3:
+                    new_space[key] = True
         space = new_space
     return space
 
@@ -50,18 +73,7 @@ def first(filename: Union[str, Path]) -> int:
     Play a 3 dimensional game of life according to the rules in `play_game`
     """
     # (x, y, z) -> is_active
-    space: Dict[Tuple[int, int, int], bool] = defaultdict(bool)
-
-    with open(filename, "rt") as infile:
-        for y, line in enumerate(infile):
-            line = line.strip()
-            for x, char in enumerate(line):
-                if char == ACTIVE:
-                    space[(x, y, 0)] = True
-                elif char == INACTIVE:
-                    space[(x, y, 0)] = False
-                else:
-                    raise ValueError(f"Invalid character: {char}")
+    space: Dict[Tuple[int, int, int], bool] = read_board(filename)
 
     space = play_game(space, 6)
     return sum(space.values())
@@ -75,18 +87,7 @@ def second(filename: Union[str, Path]) -> int:
           additional square being activated. However, it's AOC, so :-D
     """
     # (x, y, z, w) -> is_active
-    space: Dict[Tuple[int, int, int, int], bool] = defaultdict(bool)
-
-    with open(filename, "rt") as infile:
-        for y, line in enumerate(infile):
-            line = line.strip()
-            for x, char in enumerate(line):
-                if char == ACTIVE:
-                    space[(x, y, 0, 0)] = True
-                elif char == INACTIVE:
-                    space[(x, y, 0, 0)] = False
-                else:
-                    raise ValueError(f"Invalid character: {char}")
+    space: Dict[Tuple[int, int, int, int], bool] = read_board(filename, dim=4)
 
     space = play_game(space, 6)
     return sum(space.values())
