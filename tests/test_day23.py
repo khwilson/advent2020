@@ -1,10 +1,13 @@
 from pathlib import Path
 
-from advent import day05
+import pytest
 
-# def test_first(fixture_path: Path):
-#     assert day05.first(fixture_path / "example05.txt") == 514579
+from advent import day23
+
+def test_first(fixture_path: Path):
+    assert day23.first(fixture_path / "example23.txt") == 67384529
 
 
-# def test_second(fixture_path: Path):
-#     assert day05.second(fixture_path / "example05.txt") == 241861950
+@pytest.mark.skip("Takes way too long")
+def test_second(fixture_path: Path):
+    assert day23.second(fixture_path / "example23.txt") == 149245887792
