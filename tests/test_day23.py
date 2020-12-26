@@ -4,6 +4,7 @@ import pytest
 
 from advent import day23
 
+
 def test_first(fixture_path: Path):
     assert day23.first(fixture_path / "example23.txt") == 67384529
 

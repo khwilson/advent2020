@@ -1,10 +1,9 @@
 """ AOC Day 8 """
 from __future__ import annotations
 
-import copy
 from collections import deque
 from pathlib import Path
-from typing import List, Union
+from typing import List, Tuple, Union
 
 
 class CodeRunner:
@@ -13,7 +12,7 @@ class CodeRunner:
     runs it.
     """
 
-    def __init__(self, instructions: List[str, int]):
+    def __init__(self, instructions: List[Tuple[str, int]]):
         self.instructions = instructions
         self.acc = 0
         self.pc = 0
@@ -23,14 +22,14 @@ class CodeRunner:
         """
         Parse a text file of instructions into a `CodeRunner` object
         """
-        instructions: List[str, int] = []
+        instructions: List[Tuple[str, int]] = []
         with open(filename, "rt") as infile:
             for line in infile:
                 inst, val = line.strip().split()
 
                 # Values start with + or -
-                val = int(val) if val.startswith("-") else int(val[1:])
-                instructions.append((inst, val))
+                ival = int(val) if val.startswith("-") else int(val[1:])
+                instructions.append((inst, ival))
         return cls(instructions)
 
     def step(self):
@@ -94,8 +93,8 @@ def second(filename: Union[str, Path]) -> int:
     runner = CodeRunner.parse_file(filename)
 
     # Make a graph of the instruction set
-    children = [[] for _ in range(len(runner.instructions))]
-    parents = [[] for _ in range(len(runner.instructions))]
+    children: List[List[int]] = [[] for _ in range(len(runner.instructions))]
+    parents: List[List[int]] = [[] for _ in range(len(runner.instructions))]
     for pc, (inst, val) in enumerate(runner.instructions):
         if inst in ["nop", "acc"]:
             if pc + 1 < len(runner.instructions):

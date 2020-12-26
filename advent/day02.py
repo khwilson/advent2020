@@ -5,9 +5,10 @@ from typing import Tuple, Union
 
 
 def _extract_values(line: str) -> Tuple[int, int, str, str]:
-    left, right, letter, password = re.match(
-        r"(\d+)-(\d+) ([a-z]): ([a-z]+)", line.strip()
-    ).groups()
+    match = re.match(r"(\d+)-(\d+) ([a-z]): ([a-z]+)", line.strip())
+    if not match:
+        raise ValueError(f"line does not conform to rules: {line}")
+    left, right, letter, password = match.groups()
     return int(left), int(right), letter, password
 
 

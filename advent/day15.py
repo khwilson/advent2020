@@ -13,7 +13,7 @@ def play_game(filename: Union[str, Path], num_rounds: int) -> int:
         last_spoken[datum] = i
 
     next_up = data[-1]
-    for turn in range(len(last_spoken) + 1, 2020):
+    for turn in range(len(last_spoken) + 1, num_rounds):
         if next_up not in last_spoken:
             last_spoken[next_up] = turn
             next_up = 0

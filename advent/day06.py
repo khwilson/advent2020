@@ -2,7 +2,7 @@
 import re
 from collections import Counter
 from pathlib import Path
-from typing import Union
+from typing import List, Union
 
 
 def first(filename: Union[str, Path]) -> int:
@@ -24,11 +24,11 @@ def second(filename: Union[str, Path]) -> int:
     be distinct _between_ groups, only within groups.)
     """
     with open(filename, "rt") as infile:
-        groups = infile.read().strip().split("\n\n")
+        groups: List[str] = infile.read().strip().split("\n\n")
 
-    groups = [group.split("\n") for group in groups]
+    split_groups: List[List[str]] = [group.split("\n") for group in groups]
 
     return sum(
         sum(val == len(group) for val in Counter("".join(group)).values())
-        for group in groups
+        for group in split_groups
     )

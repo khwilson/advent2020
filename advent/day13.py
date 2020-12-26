@@ -42,7 +42,8 @@ def second(filename: Union[str, Path]) -> int:
             if x != "x"
         ]
 
-    # Perform the Chinese Remainder Theorem. Note that this works because everything is prime
+    # Perform the Chinese Remainder Theorem. Note that this works
+    # because everything is prime
     cur_val, cur_mod = buses_in_services[0]
     for next_rem, next_mod in buses_in_services[1:]:
         val = cur_val

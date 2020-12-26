@@ -20,7 +20,7 @@ def parse_rules(filename: Union[str, Path]) -> Dict[str, List[Tuple[str, int]]]:
         value: List of pairs (bag type, number of bags contained in
             parent bag of this type)
     """
-    rules = {}
+    rules: Dict[str, List[Tuple[str, int]]] = {}
     with open(filename, "rt") as infile:
         for line in infile:
             left, right = line.strip("\n.").split("contain")

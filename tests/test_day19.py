@@ -12,5 +12,5 @@ def test_first(fixture_path: Path):
 
 
 def test_second(fixture_path: Path):
-    day19.CS_MEMORY = {}
+    day19.RE_MEMORY = {}
     assert day19.second(fixture_path / "example192.txt") == 12

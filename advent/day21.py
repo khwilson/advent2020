@@ -2,10 +2,15 @@
 import copy
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Dict, Set, Union
+from typing import Dict, Set, Tuple, Union
 
 
-def parse_file(filename: Union[str, Path]) -> Dict[str, Set[str]]:
+def parse_file(
+    filename: Union[str, Path]
+) -> Tuple[Dict[str, Set[str]], Dict[str, int]]:
+    """
+    Parse the set of allergens attached to various collections of foods
+    """
     lines = []
     with open(filename, "rt") as infile:
         for line in infile:

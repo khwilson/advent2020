@@ -1,17 +1,16 @@
 """ AOC Day 23 """
 from pathlib import Path
-from typing import Union, List
+from typing import List, Union
 
 
-def first(filename: Union[str, Path]) -> int:
+def first(filename: Union[str, Path], num_rounds: int = 100) -> int:
     """
     Part 1
     """
-    with open(filename, 'rt') as infile:
-        cups = [int(x) for x in (infile.read().strip())]
+    with open(filename, "rt") as infile:
+        cups = [int(x) for x in infile.read().strip()]
 
-    NUM_ROUNDS = 100
-    for num_round in range(NUM_ROUNDS):
+    for num_round in range(num_rounds):
         cur_idx = 0
         cur_idx = num_round % len(cups)
         cur_cup = cups[cur_idx]
@@ -27,7 +26,7 @@ def first(filename: Union[str, Path]) -> int:
             if next_cup == 0:
                 next_cup = len(cups)
 
-        next_cups = []
+        next_cups: List[int] = []
         while len(next_cups) < len(cups):
             this_cup = cups[cur_idx]
             if this_cup in removed_cups:
@@ -40,7 +39,10 @@ def first(filename: Union[str, Path]) -> int:
 
             cur_idx = (cur_idx + 1) % len(cups)
 
-        cups = next_cups[-(num_round % len(cups)):] + next_cups[:-(num_round % len(cups))]
+        cups = (
+            next_cups[-(num_round % len(cups)) :]
+            + next_cups[: -(num_round % len(cups))]
+        )
 
     idx = cups.index(1)
     output = []
@@ -50,17 +52,15 @@ def first(filename: Union[str, Path]) -> int:
         cur_idx += 1
         cur_idx %= len(cups)
 
-    return int(''.join(map(str, output)))
+    return int("".join(map(str, output)))
 
 
-
-import click
-def second(filename: Union[str, Path]) -> int:
+def second(filename: Union[str, Path], num_rounds: int = 10_000_000) -> int:
     """
     Part 2
     """
     vals: List[int] = []
-    with open(filename, 'rt') as infile:
+    with open(filename, "rt") as infile:
         for cup in infile.read().strip():
             vals.append(int(cup) - 1)
 
@@ -74,9 +74,12 @@ def second(filename: Union[str, Path]) -> int:
 
     cur_val = vals[0]
 
-    NUM_ROUNDS = 10_000_000
-    for _ in range(NUM_ROUNDS):
-        removed_vals = [val_to_next[cur_val], val_to_next[val_to_next[cur_val]], val_to_next[val_to_next[val_to_next[cur_val]]]]
+    for _ in range(num_rounds):
+        removed_vals = [
+            val_to_next[cur_val],
+            val_to_next[val_to_next[cur_val]],
+            val_to_next[val_to_next[val_to_next[cur_val]]],
+        ]
 
         next_cup = (cur_val - 1) % num_vals
         while next_cup in removed_vals:

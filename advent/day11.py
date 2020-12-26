@@ -7,7 +7,7 @@ FLOOR = "."
 EMPTY = "L"
 OCCUPIED = "#"
 
-AROUND = tuple([(i, j) for i in [-1, 0, 1] for j in [-1, 0, 1] if not (i == j == 0)])
+AROUND = tuple([(i, j) for i in [-1, 0, 1] for j in [-1, 0, 1] if not i == j == 0])
 
 
 def step_in_direction(
@@ -19,7 +19,7 @@ def step_in_direction(
     dir_j: int,
     max_steps: Optional[int] = None,
 ) -> Iterator[Tuple[int, int]]:
-    num_steps = (max_steps and range(max_steps)) or its.count()
+    num_steps = range(max_steps) if max_steps else its.count()
     for _ in num_steps:
         i += dir_i
         j += dir_j
@@ -37,8 +37,10 @@ def detect(
     it means to be able to be seen.
     """
     num_rows, num_cols = len(layout), len(layout[0])
-    for di, dj in AROUND:
-        for vi, vj in step_in_direction(i, j, num_rows, num_cols, di, dj, max_steps):
+    for dir_i, dir_j in AROUND:
+        for vi, vj in step_in_direction(
+            i, j, num_rows, num_cols, dir_i, dir_j, max_steps
+        ):
             if layout[vi][vj] != FLOOR:
                 yield layout[vi][vj]
                 break

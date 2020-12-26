@@ -4,8 +4,6 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, Iterator, Tuple, Union
 
-import numpy as np
-
 ACTIVE = "#"
 INACTIVE = "."
 

@@ -1,9 +1,6 @@
 """ AOC Day 8 """
-import itertools as its
 from pathlib import Path
 from typing import Union
-
-import numpy as np
 
 
 def disrete_logarithm(answer, base, mod):
@@ -38,6 +35,6 @@ def first(filename: Union[str, Path]) -> int:
 
 def second(filename: Union[str, Path]) -> str:
     """
-    Part 2
+    Part 2 doesn't exist!
     """
     return "Merry Christmas!"

@@ -4,7 +4,7 @@ import math
 import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Optional, Set, Tuple, Union
 
 import numpy as np
 
@@ -31,8 +31,8 @@ def get_rotations(tile: np.ndarray) -> List[np.ndarray]:
 
 def dfs_the_sea(
     size: int,
-    adj_list: Dict[int, Dict[int, Dict[str, List[Tuple[int, int]]]]],
-    final_tile_ids: List[int],
+    adj_list: Dict[int, Dict[int, Dict[str, Set[Tuple[int, int]]]]],
+    final_tile_ids: List[Tuple[int, int]],
 ) -> bool:
     """
     Do a depth first search through all possible layouts given the
@@ -59,8 +59,8 @@ def dfs_the_sea(
         for tile_id, rotations in adj_list.items()
         for rotation in rotations
     }
-    for tile_id, rotation, dir in needs_to_match:
-        could_be &= adj_list[tile_id][rotation][dir]
+    for tile_id, rotation, direction in needs_to_match:
+        could_be &= adj_list[tile_id][rotation][direction]
 
     for tile_id, rotation in could_be:
         final_tile_ids.append((tile_id, rotation))
@@ -71,14 +71,16 @@ def dfs_the_sea(
     return False
 
 
-def do_part_one(filename: Union[str, Path]) -> int:
+def do_part_one(
+    filename: Union[str, Path]
+) -> Tuple[Dict[int, List[np.ndarray]], List[Tuple[int, int]], int]:
     """
     Find the appropriate sea layout
     """
     with open(filename, "rt") as infile:
         raw_tiles = infile.read().split("\n\n")
 
-    tiles_with_rotations = {}
+    tiles_with_rotations: Dict[int, List[np.ndarray]] = {}
     for raw_tile in raw_tiles:
 
         stile = raw_tile.split("\n")
@@ -93,8 +95,10 @@ def do_part_one(filename: Union[str, Path]) -> int:
     size = int(math.sqrt(len(tiles_with_rotations)))
 
     # Next setup all possible ways to do the adjacencies
-    # tile_id -> rotation -> lrud -> List[tile_id]
-    adj_list = defaultdict(lambda: defaultdict(lambda: defaultdict(set)))
+    # tile_id -> rotation -> lrud -> Set[(tile_id, rotation)]
+    adj_list: Dict[int, Dict[int, Dict[str, Set[Tuple[int, int]]]]] = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(set))
+    )
     for tile_id, rotations in tiles_with_rotations.items():
         for rotation, tile in enumerate(rotations):
             for other_tile_id, other_rotations in tiles_with_rotations.items():
@@ -112,7 +116,7 @@ def do_part_one(filename: Union[str, Path]) -> int:
                     if (tile[:, -1] == other_tile[:, 0]).all():
                         adj["right"].add((other_tile_id, other_rotation))
 
-    final_tile_ids = []
+    final_tile_ids: List[Tuple[int, int]] = []
     dfs_the_sea(size, adj_list, final_tile_ids)
 
     return tiles_with_rotations, final_tile_ids, size
@@ -124,9 +128,9 @@ def first(filename) -> int:
     return math.prod(final_tile_ids[idx][0] for idx in [0, size - 1, -1, -size])
 
 
-def second(filename: Union[str, Path]) -> int:
+def second(filename: Union[str, Path]) -> Optional[int]:
     """
-    Part 2
+    Return None if we never find the monster!
     """
     tiles_with_rotations, final_tile_ids, size = do_part_one(filename)
 
@@ -162,3 +166,5 @@ def second(filename: Union[str, Path]) -> int:
         # The prompt said there's only one correct rotation
         if is_found.any():
             return the_sea.sum() - is_found.sum()
+
+    return None

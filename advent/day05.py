@@ -2,8 +2,6 @@
 from pathlib import Path
 from typing import Union
 
-import numpy as np
-
 
 def convert_all(string: str) -> int:
     """

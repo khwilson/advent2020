@@ -18,7 +18,10 @@ RENAME_MAP = {
 }
 
 
-def _is_valid_year(year: str, left: int, right: int) -> bool:
+def _is_valid_year(year: Optional[str], left: int, right: int) -> bool:
+    if year is None:
+        return False
+
     if not re.fullmatch(r"\d{4}", year):
         return False
     return left <= int(year) <= right
@@ -30,14 +33,14 @@ class PotentialPassport:
     A representation of the raw data
     """
 
-    birth_year: Optional[int] = None
-    issue_year: Optional[int] = None
-    expiration_year: Optional[int] = None
+    birth_year: Optional[str] = None
+    issue_year: Optional[str] = None
+    expiration_year: Optional[str] = None
     height: Optional[str] = None
     hair_color: Optional[str] = None
     eye_color: Optional[str] = None
-    passport_id: Optional[int] = None
-    country_id: Optional[int] = None
+    passport_id: Optional[str] = None
+    country_id: Optional[str] = None
 
     @classmethod
     def parse(cls, datum: List[str]) -> PotentialPassport:
@@ -67,6 +70,8 @@ class PotentialPassport:
         if not self.is_simple_valid():
             return False
 
+        if not self.height:
+            return False
         match = re.fullmatch(r"(\d+)(cm|in)", self.height)
         if not match:
             return False
@@ -83,8 +88,10 @@ class PotentialPassport:
             _is_valid_year(self.birth_year, 1920, 2002)
             and _is_valid_year(self.issue_year, 2010, 2020)
             and _is_valid_year(self.expiration_year, 2020, 2030)
+            and self.hair_color is not None
             and re.fullmatch(r"#[0-9a-f]{6}", self.hair_color)
             and self.eye_color in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
+            and self.passport_id is not None
             and re.fullmatch(r"[0-9]{9}$", self.passport_id)
         )
 
@@ -93,8 +100,8 @@ def parse_file(filename: Union[str, Path]) -> List[PotentialPassport]:
     """
     Parse a file into a list of potential passports
     """
-    data = []
-    datum = []
+    data: List[List[str]] = []
+    datum: List[str] = []
     with open(filename, "rt") as infile:
         for line in infile:
             line = re.sub(r"\s+", " ", line.strip())

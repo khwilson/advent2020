@@ -6,6 +6,11 @@ from typing import Union
 
 
 class Coord:
+    """
+    Represent an x/y coordiate as a pair of ints. Also allow for
+    adding and multiplying them pointwise.
+    """
+
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
@@ -32,9 +37,14 @@ def _nsew(pos: Coord, cmd: str, val: int) -> Coord:
         return pos + EAST * val
     if cmd == "W":
         return pos + WEST * val
+    raise NotImplementedError(f"cmd must be one of N, S, E, or W, not {cmd}")
 
 
 class Ship:
+    """
+    Perform the commands in absolute coordinates
+    """
+
     def __init__(self):
         self.pos = Coord(0, 0)
         self.direction = EAST
@@ -55,6 +65,10 @@ class Ship:
 
 
 class Waypoint:
+    """
+    Perform the commands in relative coordinates
+    """
+
     def __init__(self):
         self.pos = Coord(10, 1)
         self.abs_ship_pos = Coord(0, 0)

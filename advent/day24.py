@@ -11,7 +11,7 @@ def get_board(filename: Union[str, Path]) -> Dict[Tuple[int, int, int], int]:
     """
     Parse the incoming file for the starting state of the hexagonal Life board
     """
-    tiles = defaultdict(lambda: WHITE)
+    tiles: Dict[int] = defaultdict(lambda: WHITE)
     with open(filename, "rt") as infile:
         for line in infile:
             a, r, c = 0, 0, 0
@@ -53,14 +53,14 @@ def neighbors(a: int, r: int, c: int) -> List[Tuple[int, int, int]]:
     """
     Return the list of all six neighbors of the passed coordinate
     """
-    return (
+    return [
         (1 - a, r - (1 - a), c - (1 - a)),  # NW
         (1 - a, r - (1 - a), c + a),  # NE
         (a, r, c + 1),  # E
         (1 - a, r + a, c + a),  # SE
         (1 - a, r + a, c - (1 - a)),  # SW
         (a, r, c - 1),  # W
-    )
+    ]
 
 
 def first(filename: Union[str, Path]) -> int:
@@ -91,7 +91,7 @@ def second(filename: Union[str, Path]) -> int:
                 if count_black_neighbors == 2:
                     new_board[tile] = BLACK
             else:
-                if count_black_neighbors == 1 or count_black_neighbors == 2:
+                if count_black_neighbors in (1, 2):
                     new_board[tile] = BLACK
         board = new_board
 

@@ -1,10 +1,7 @@
 """ AOC Day 10 """
-import itertools as its
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Union
-
-import numpy as np
 
 
 def first(filename: Union[str, Path]) -> int:
@@ -12,7 +9,7 @@ def first(filename: Union[str, Path]) -> int:
     Sort the input, prepend with 0 and append with 3 + the max.
 
     Return:
-        (number of successive differences == 1) * (number of successive differences == 3)
+        (# of successive differences == 1) * (# of successive differences == 3)
     """
     with open(filename, "rt") as infile:
         jolts = sorted(int(line.strip()) for line in infile)

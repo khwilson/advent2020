@@ -29,12 +29,6 @@ from . import (
     day23,
     day24,
     day25,
-    day26,
-    day27,
-    day28,
-    day29,
-    day30,
-    day31,
 )
 
 
@@ -241,54 +235,6 @@ def day25_command(filename: str):
     """ Day 25 """
     click.echo(f"The answer to part 1 is: {day25.first(filename)}")
     click.echo(f"The answer to part 2 is: {day25.second(filename)}")
-
-
-@cli.command("day26")
-@click.argument("filename")
-def day26_command(filename: str):
-    """ Day 26 """
-    click.echo(f"The answer to part 1 is: {day26.first(filename)}")
-    click.echo(f"The answer to part 2 is: {day26.second(filename)}")
-
-
-@cli.command("day27")
-@click.argument("filename")
-def day27_command(filename: str):
-    """ Day 27 """
-    click.echo(f"The answer to part 1 is: {day27.first(filename)}")
-    click.echo(f"The answer to part 2 is: {day27.second(filename)}")
-
-
-@cli.command("day28")
-@click.argument("filename")
-def day28_command(filename: str):
-    """ Day 28 """
-    click.echo(f"The answer to part 1 is: {day28.first(filename)}")
-    click.echo(f"The answer to part 2 is: {day28.second(filename)}")
-
-
-@cli.command("day29")
-@click.argument("filename")
-def day29_command(filename: str):
-    """ Day 29 """
-    click.echo(f"The answer to part 1 is: {day29.first(filename)}")
-    click.echo(f"The answer to part 2 is: {day29.second(filename)}")
-
-
-@cli.command("day30")
-@click.argument("filename")
-def day30_command(filename: str):
-    """ Day 30 """
-    click.echo(f"The answer to part 1 is: {day30.first(filename)}")
-    click.echo(f"The answer to part 2 is: {day30.second(filename)}")
-
-
-@cli.command("day31")
-@click.argument("filename")
-def day31_command(filename: str):
-    """ Day 31 """
-    click.echo(f"The answer to part 1 is: {day31.first(filename)}")
-    click.echo(f"The answer to part 2 is: {day31.second(filename)}")
 
 
 if __name__ == "__main__":

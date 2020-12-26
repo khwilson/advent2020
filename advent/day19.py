@@ -10,6 +10,9 @@ RuleType = List[Union[str, Tuple[int, ...]]]
 
 
 def parse_input(filename: Union[str, Path]) -> Tuple[Dict[int, RuleType], List[str]]:
+    """
+    Parse the input rules
+    """
     rules = {}
     strings = []
     with open(filename, "rt") as infile:
@@ -68,6 +71,11 @@ def construct_strings(rules: Dict[int, RuleType], rule_id: int) -> Set[str]:
     return final
 
 
+# Memoizer for the `regex` function
+# Memoized on `(rule_id, depth)`
+RE_MEMORY = {}
+
+
 def regex(
     rules: Dict[int, RuleType], rule_id: int, cur_depth: int, max_depth: int
 ) -> str:
@@ -79,6 +87,9 @@ def regex(
     if cur_depth > max_depth:
         return ""
 
+    if (rule_id, cur_depth) in RE_MEMORY:
+        return RE_MEMORY[(rule_id, cur_depth)]
+
     re_rules = []
     for rule in rules[rule_id]:
         if isinstance(rule, str):
@@ -89,7 +100,8 @@ def regex(
                 for sub_rule_id in rule
             ]
             re_rules.append(reduce(operator.add, next_rules, ""))
-    return f'({"|".join(re_rules)})'
+    RE_MEMORY[(rule_id, cur_depth)] = f'({"|".join(re_rules)})'
+    return RE_MEMORY[(rule_id, cur_depth)]
 
 
 def first(filename: Union[str, Path]) -> int:
